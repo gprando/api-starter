@@ -40,7 +40,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HelloResponse'
-
+  /goodbye:
+    get:
+      description: Returns 'Goodbye \<name\>!!!' to the authenticated caller
+      tags:
+        - greeting
+      operationId: goodbye
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HelloResponse'
 components:
   schemas:
     HelloResponse:

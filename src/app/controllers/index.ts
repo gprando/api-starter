@@ -1,2 +1,2 @@
-export { default as GreetingController } from './GreetingController';
-export { default as test } from './GreetingController';
+export * from './GreetingController';
+export * from './UserController';
