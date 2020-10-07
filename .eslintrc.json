@@ -23,6 +23,7 @@
         "prettier"
     ],
     "rules": {
+      "import/no-unresolved": "off",
       "import/extensions": [
         "error",
         "ignorePackages",
