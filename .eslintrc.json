@@ -23,6 +23,8 @@
         "prettier"
     ],
     "rules": {
+      "consistent-return": "off",
+      "no-underscore-dangle": "off",
       "@typescript-eslint/ban-types": "off",
       "import/no-unresolved": "off",
       "import/extensions": [

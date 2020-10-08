@@ -1,2 +1,2 @@
-export * from './GreetingController';
-export * from './UserController';
+export * from './greeting';
+export * from './user';

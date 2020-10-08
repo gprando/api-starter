@@ -1,9 +1,15 @@
+import logger from './utils/logger';
 import createServer from './utils/server';
+import db from './utils/db';
 
-createServer()
-  .then(server =>
-    server.listen(3333, () =>
-      console.info(`Listening on http://localhost:3333`),
-    ),
-  )
-  .catch(err => console.error(`Error: ${err}`));
+const init = async () => {
+  await db.open();
+
+  const server = await createServer();
+
+  server.listen(3000, () => {
+    logger.info(`Listening on http://localhost:3000`);
+  });
+};
+
+init();

@@ -1,31 +1,31 @@
 /* eslint-disable prefer-rest-params */
-import { Request, Response, NextFunction } from 'express';
+/* istanbul ignore file */
+import express from 'express';
 
-export default (
-  request: Request,
-  response: Response,
-  next: NextFunction,
+import logger from '@root/utils/logger';
+
+const expressDevLogger = (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
 ): void => {
   const startHrTime = process.hrtime();
 
-  console.log(
-    `Request: ${request.method} ${
-      request.url
-    } at ${new Date().toUTCString()}, User-Agent: ${request.get('User-Agent')}`,
+  logger.http(
+    `Request: ${req.method} ${
+      req.url
+    } at ${new Date().toUTCString()}, User-Agent: ${req.get('User-Agent')}`,
   );
+  logger.http(`Request Body: ${JSON.stringify(req.body)}`);
 
-  console.log(`Request Body: ${JSON.stringify(request.body)}`);
-
-  const [oldWrite, oldEnd] = [response.write, response.end];
-
+  const [oldWrite, oldEnd] = [res.write, res.end];
   const chunks: Buffer[] = [];
-
-  (response.write as unknown) = function (chunk: any): void {
+  (res.write as unknown) = function (chunk: any): void {
     chunks.push(Buffer.from(chunk));
-    (oldWrite as Function).apply(response, arguments);
+    (oldWrite as Function).apply(res, arguments);
   };
 
-  response.end = function (chunk: any): void {
+  res.end = function (chunk: any): void {
     if (chunk) {
       chunks.push(Buffer.from(chunk));
     }
@@ -33,14 +33,14 @@ export default (
     const elapsedHrTime = process.hrtime(startHrTime);
     const elapsedTimeInMs = elapsedHrTime[0] * 1000 + elapsedHrTime[1] / 1e6;
 
-    console.log(
-      `Response ${response.statusCode} ${elapsedTimeInMs.toFixed(3)} ms`,
-    );
+    logger.http(`Response ${res.statusCode} ${elapsedTimeInMs.toFixed(3)} ms`);
 
     const body = Buffer.concat(chunks).toString('utf8');
-    console.log(`Response Body: ${body}`);
-    (oldEnd as Function).apply(response, arguments);
+    logger.http(`Response Body: ${body}`);
+    (oldEnd as Function).apply(res, arguments);
   };
 
   next();
 };
+
+export default expressDevLogger;

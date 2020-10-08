@@ -1,14 +1,14 @@
-import { Response } from 'express';
+import * as express from 'express';
 import { OutgoingHttpHeaders } from 'http';
 
 export default function writeJsonResponse(
-  response: Response,
+  res: express.Response,
   code: any,
   payload: any,
   headers?: OutgoingHttpHeaders | undefined,
 ): void {
   const data =
     typeof payload === 'object' ? JSON.stringify(payload, null, 2) : payload;
-  response.writeHead(code, { ...headers, 'Content-Type': 'application/json' });
-  response.end(data);
+  res.writeHead(code, { ...headers, 'Content-Type': 'application/json' });
+  res.end(data);
 }
