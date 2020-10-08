@@ -56,6 +56,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/HelloResponse'
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
   schemas:
     HelloResponse:
       type: object
